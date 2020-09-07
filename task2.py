@@ -1,4 +1,4 @@
-#0 1 - rus, 2 - ukr, 3 -eng
+# 1 - rus, 2 - ukr, 3 -eng
 from datetime import datetime, timedelta
 
 
@@ -53,7 +53,7 @@ class Document(object):
         # print(price)
         if self.filetype not in self.base_filetypes:
             price *= 1.2
-        return max(price, self.min_prices[self.lang])
+        return round(max(price, self.min_prices[self.lang]), 2)
 
     def calculate_time(self) -> float:
         min_time = 60
@@ -61,7 +61,7 @@ class Document(object):
         # print(time)
         if self.filetype not in self.base_filetypes:
             time *= 1.2
-        return max(time, min_time)
+        return round(max(time, min_time),2)
 
     def calculate_deadline(self, dt: datetime, minutes: float) -> datetime:
         print('Order get at: ', dt)
@@ -91,8 +91,120 @@ class Document(object):
         return dt
 
 
-doc = Document('docxv', 4000, 3)
+doc = Document('docx', 4000, 3)
 print('price = ', doc.calculate_price(), ' UAH')
 ex_time = doc.calculate_time()
 print('Execution time = ', ex_time, ' minutes')
 print('deadline = ', doc.calculate_deadline(datetime(2020, 9, 7, 13, 12), ex_time))
+
+
+def test_1():
+    doc = Document('docx', 100, 1)
+    assert doc.calculate_price() == 50
+    assert doc.calculate_time() == 60
+
+
+def test_2():
+    doc = Document('docx', 100, 3)
+    assert doc.calculate_price() == 120
+    assert doc.calculate_time() == 60
+
+
+def test_3():
+    doc = Document('docx', 1500, 1)
+    assert doc.calculate_price() == 75
+    assert doc.calculate_time() == 97.52
+
+
+def test_4():
+    doc = Document('xlsx', 1500, 1)
+    assert doc.calculate_price() == 75 * 1.2
+    assert doc.calculate_time() == 117.02
+
+
+def test_5():
+    doc = Document('xlsx', 1500, 3)
+    assert doc.calculate_price() == 216
+    assert doc.calculate_time() == 360.32
+
+
+def test_6():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 7, 17, 40)  # Mon, 7th of September, 2020, 17-40
+    ex_time = 200
+    expected_date = datetime(2020, 9, 8, 12, 0)  # Tue, 8th of September, 2020, 12-00
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_7():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 4, 17, 40)  # Fri, 4th of September, 2020, 17-40
+    ex_time = 200
+    expected_date = datetime(2020, 9, 7, 12, 0)  # Mon, 7th of September, 2020, 12-00
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_8():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 4, 9, 40)  # Fri, 4th of September, 2020, 9-40
+    ex_time = 120
+    expected_date = datetime(2020, 9, 4, 12, 0)  # Fri, 4th of September, 2020, 12-00
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_9():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 5, 16, 30)  # Sat, 5th of September, 2020, 16-30
+    ex_time = 12*60
+    expected_date = datetime(2020, 9, 8, 13, 0)  # Tue, 8th of September, 2020, 13-00
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_10():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 4, 9, 40)  # Fri, 4th of September, 2020, 9-40
+    ex_time = 20*60
+    expected_date = datetime(2020, 9, 8, 12, 0)  # Tue, 8th of September, 2020, 12-00
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_11():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 4, 18, 59)  # Fri, 4th of September, 2020, 9-40
+    ex_time = 2
+    expected_date = datetime(2020, 9, 7, 10, 1)  # Mon, 7th of September, 2020, 10-01
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_12():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 2, 19, 32)  # Wed
+    ex_time = 157
+    expected_date = datetime(2020, 9, 3, 12, 37)  # Thu
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_13():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 2, 0, 41)  # Wed
+    ex_time = 157
+    expected_date = datetime(2020, 9, 2, 12, 37)  # Wed
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_14():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 6, 0, 41)  # Sun
+    ex_time = 322
+    expected_date = datetime(2020, 9, 7, 15, 22)  # Mon
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
+def test_15():
+    doc = Document('docx', 100, 1)
+    start_date = datetime(2020, 9, 2, 22, 51)  # Wed
+    ex_time = 157
+    expected_date = datetime(2020, 9, 3, 12, 37)  # Thu
+    assert doc.calculate_deadline(start_date, ex_time) == expected_date
+
+
