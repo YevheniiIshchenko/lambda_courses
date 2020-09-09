@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Correct bureau</title>
+</head>
+<body>
+    <a href="{{ url_for('index')}}"> Home </a><br>
+    <a href="{{ url_for('order')}}"> Make order </a><br>
+    <hr>
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.text.label }}
+            {{ form.text(cols=75, rows=15)|safe }}
+        </p>
+        <p>
+            {{ form.lang.label }}
+            {{ form.lang }}
+        </p>
+        <p> {{ form.send }} </p>
+    </form>
+
+    <div>
+        <p>Price = {{ price }} UAH </p>
+        <p>Execution time = {{ ex_time }} minutes </p>
+        <p>Deadline = {{ deadline }} </p>
+    </div>
+{% endblock content %}

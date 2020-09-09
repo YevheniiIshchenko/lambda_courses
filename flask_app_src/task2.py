@@ -91,11 +91,11 @@ class Document(object):
         return dt
 
 
-doc = Document('docx', 4000, 3)
-print('price = ', doc.calculate_price(), ' UAH')
-ex_time = doc.calculate_time()
-print('Execution time = ', ex_time, ' minutes')
-print('deadline = ', doc.calculate_deadline(datetime(2020, 9, 7, 13, 12), ex_time))
+# doc = Document('docx', 4000, 3)
+# print('price = ', doc.calculate_price(), ' UAH')
+# ex_time = doc.calculate_time()
+# print('Execution time = ', ex_time, ' minutes')
+# print('deadline = ', doc.calculate_deadline(datetime(2020, 9, 7, 13, 12), ex_time))
 
 
 def test_1():
