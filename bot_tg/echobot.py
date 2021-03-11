@@ -7,20 +7,19 @@ import psycopg2
 import time
 
 # postgres
-connection = psycopg2.connect(user="yevhenii",
-                              password="123456qwerty123456",
-                              host="127.0.0.1",
-                              port="5432",
-                              database="echobot")
+connection = psycopg2.connect(user="user",
+                              password="password",
+                              host="host",
+                              port="port",
+                              database="database")
 
 cursor = connection.cursor()
 
 # telegram bot
-bot = telebot.TeleBot('973401040:AAE0DIojS0busjJCKhShrBMv5DHpoi7xza0')
+bot = telebot.TeleBot('token')
 
 # mongodb
-client = MongoClient(
-    'mongodb+srv://JDooP:ekalox99@echobot513test.dednu.mongodb.net/echobot513test?retryWrites=true&w=majority')
+client = MongoClient()
 db = client['echobot513test']
 posts = db.posts
 
